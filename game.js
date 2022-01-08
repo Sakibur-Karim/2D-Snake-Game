@@ -1,6 +1,7 @@
 kaboom()
 
 loadRoot('Images/')
+loadSprite('apple', 'apple.png')
 loadSprite('bg', 'bg.jpg')
 
 scene('main', () => {
@@ -43,7 +44,7 @@ scene('main', () => {
       let segment = add([
         rect(block_size, block_size),
         pos(block_size, block_size * i),
-        color(0, 0, 255),
+        color(0, 213, 255),
         area(),
         'snake',
       ])
@@ -124,7 +125,7 @@ scene('main', () => {
       add([
         rect(block_size, block_size),
         pos(snake_head.pos.x + move_x, snake_head.pos.y + move_y),
-        color(0, 0, 255),
+        color(0, 213, 255),
         area(),
         'snake',
         'wraps',
@@ -155,14 +156,13 @@ scene('main', () => {
   let food = null
 
   function respawn_food() {
-    let new_pos = rand(vec2(width(), height()))
+    let new_pos = rand(vec2(width() - 1, height() - 1))
 
     if (food) {
       destroy(food)
     }
     food = add([
-      rect(block_size, block_size),
-      color(0, 255, 0),
+      sprite('apple'),
       pos(new_pos),
       area(),
       'food',
