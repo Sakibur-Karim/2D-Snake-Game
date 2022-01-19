@@ -3,9 +3,17 @@ kaboom()
 loadRoot('Images/')
 loadSprite('apple', 'apple.png')
 loadSprite('bg', 'bg.jpg')
+loadSprite('pizza', 'pizza.png')
+
+loadRoot('Sounds/')
+loadSound('m', 'music.mp3')
+loadSound('eat', 'eat.wav')
 
 scene('main', () => {
   const block_size = 40
+
+  const music = play('m')
+  music.loop()
 
   layers(['bg', 'game', 'ui'], 'game')
 
@@ -22,7 +30,6 @@ scene('main', () => {
       pos: vec2(8, 24),
     })
   })
-
   const directions = {
     UP: 'up',
     DOWN: 'down',
@@ -44,7 +51,7 @@ scene('main', () => {
       let segment = add([
         rect(block_size, block_size),
         pos(block_size, block_size * i),
-        color(0, 213, 255),
+        color(149, 255, 128),
         area(),
         'snake',
       ])
@@ -125,7 +132,7 @@ scene('main', () => {
       add([
         rect(block_size, block_size),
         pos(snake_head.pos.x + move_x, snake_head.pos.y + move_y),
-        color(0, 213, 255),
+        color(149, 255, 128),
         area(),
         'snake',
         'wraps',
@@ -154,6 +161,7 @@ scene('main', () => {
   })
 
   let food = null
+  let food1 = null
 
   function respawn_food() {
     let new_pos = rand(vec2(width() - 1, height() - 1))
@@ -161,25 +169,37 @@ scene('main', () => {
     if (food) {
       destroy(food)
     }
-    food = add([
-      sprite('apple'),
-      pos(new_pos),
-      area(),
-      'food',
-    ])
+    if (food1) {
+      destroy(food1)
+    }
+    if (score!=0 && score%10==0){food1 = add([sprite('pizza'), pos(rand(vec2(width() - 1, height() - 1))), area(), 'food1'])}
+    food = add([sprite('apple'), pos(new_pos), area(), 'food'])
   }
 
   onCollide('snake', 'food', (s, f) => {
     snake_length++
     respawn_food()
-    score++
+    score += 4
     move_delay -= 0.001
+    play('eat', {
+      volume: 1
+    })
+  })
+  
+  onCollide('snake', 'food1', (s, f) => {
+    snake_length++
+    respawn_food()
+    score += 30
+    move_delay -= 0.002
+    play('eat', {
+      volume: 1
+    })
   })
 
   onCollide('snake', 'snake', (s, t) => {
     run_action = false
     shake(12)
-
+    music.stop()
     add([
       text('Your score: ' + score + '\n\nPress Space to restart!', {
         size: 100,
