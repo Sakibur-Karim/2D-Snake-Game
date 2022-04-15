@@ -10,13 +10,12 @@ loadSound('m', 'music.mp3')
 loadSound('eat', 'eat.wav')
 
 scene('main', () => {
-  const block_size = 40
 
+  const block_size = 40
   const music = play('m')
   music.loop()
 
   layers(['bg', 'game', 'ui'], 'game')
-
   add([sprite('bg'), layer('bg'), scale(2)])
 
   ui = add([layer('ui')])
@@ -125,7 +124,6 @@ scene('main', () => {
         break
     }
 
-    // Get the last element (the snake head)
     let snake_head = snake_body[snake_body.length - 1]
 
     snake_body.push(
@@ -140,7 +138,7 @@ scene('main', () => {
     )
 
     if (snake_body.length > snake_length) {
-      let tail = snake_body.shift() // Remove the last of the tail
+      let tail = snake_body.shift()
       destroy(tail)
     }
   })
@@ -160,23 +158,25 @@ scene('main', () => {
     }
   })
 
-  let food = null
   let food1 = null
+  let food2 = null
 
   function respawn_food() {
     let new_pos = rand(vec2(width() - 1, height() - 1))
 
-    if (food) {
-      destroy(food)
-    }
     if (food1) {
       destroy(food1)
     }
-    if (score!=0 && score%10==0){food1 = add([sprite('pizza'), pos(rand(vec2(width() - 1, height() - 1))), area(), 'food1'])}
-    food = add([sprite('apple'), pos(new_pos), area(), 'food'])
+    if (food2) {
+      destroy(food2)
+    }
+    if (score!=0 && score%10==0) {
+      food2 = add([sprite('pizza'), pos(rand(vec2(width() - 1, height() - 1))), area(), 'food2'])
+    }
+    food1 = add([sprite('apple'), pos(new_pos), area(), 'food1'])
   }
 
-  onCollide('snake', 'food', (s, f) => {
+  onCollide('snake', 'food1', (s, f) => {
     snake_length++
     respawn_food()
     score += 4
@@ -186,7 +186,7 @@ scene('main', () => {
     })
   })
   
-  onCollide('snake', 'food1', (s, f) => {
+  onCollide('snake', 'food2', (s, f) => {
     snake_length++
     respawn_food()
     score += 30
