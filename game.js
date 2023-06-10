@@ -22,7 +22,7 @@ scene('main', () => {
   //layers(['bg', 'game', 'ui'], 'game')
   //add([sprite('bg'), layer('bg'), scale(2)])
 
-  add([sprite('bg')])
+  add([sprite('bg'), scale(2)])
 
   //ui = add([layer('ui')])
   //let score = 0
