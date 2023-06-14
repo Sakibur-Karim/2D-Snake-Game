@@ -11,6 +11,7 @@ loadSound('eat', 'eat.wav')
 volume(0.5)
 
 
+
 scene('main', () => {
 
   const block_size = 40
