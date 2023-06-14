@@ -27,7 +27,7 @@ scene('main', () => {
   //ui = add([layer('ui')])
   //let score = 0
   const score = add([
-    text("Score: 0"),
+    text("Points: 0"),
     pos(24, 24),
     { value: 0 },
   ])
