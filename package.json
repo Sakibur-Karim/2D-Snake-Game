@@ -1,18 +1,14 @@
 {
-  "homepage": "https://sakibur-karim.github.io/2D-Snake-Game",
-  "name": "mygame",
-  "scripts": {
-    "build": "esbuild --bundle src/main.js --outfile=www/main.js --minify",
-    "dev": "esbuild --bundle src/main.js --outfile=www/main.js --servedir=www",
-    "bundle": "npm run build && mkdir -p dist && zip -r dist/game.zip www -x \"**/.DS_Store\"",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
-  },
-  "dependencies": {
-    "kaboom": "2000.0.0-beta.24"
-  },
-  "devDependencies": {
-    "esbuild": "^0.19.2",
-    "gh-pages": "^6.0.0"
-  }
+	"name": "mygame",
+	"scripts": {
+		"build": "esbuild --bundle src/main.js --outfile=www/main.js --minify",
+		"dev": "esbuild --bundle src/main.js --outfile=www/main.js --servedir=www",
+		"bundle": "npm run build && mkdir -p dist && zip -r dist/game.zip www -x \"**/.DS_Store\""
+	},
+	"dependencies": {
+		"kaboom": "2000.0.0-beta.24"
+	},
+	"devDependencies": {
+		"esbuild": "^0.19.2"
+	}
 }

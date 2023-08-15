@@ -1,4 +1,4 @@
-import kaboom from 'kaboom'
+import kaboom from "kaboom"
 
 kaboom()
 loadRoot('images/')
@@ -10,16 +10,18 @@ loadRoot('sounds/')
 loadSound('m', 'music.mp3')
 loadSound('eat', 'eat.wav')
 
+
 scene('main', () => {
+
   const block_size = 40
-  const music = play('m', {
-    loop: true,
+  const music = play("m", {
+    loop: true
   })
 
   add([sprite('bg')])
 
   const score = add([
-    text('Score: 0', { font: 'apl386', size: 48, width: 320 }),
+    text("Score: 0", {font: 'apl386',  size: 48, width: 320}),
     pos(24, 24),
     { value: 0 },
   ])
@@ -165,13 +167,8 @@ scene('main', () => {
     if (food2) {
       destroy(food2)
     }
-    if (score.value != 0 && score.value % 10 == 0) {
-      food2 = add([
-        sprite('pizza'),
-        pos(rand(vec2(width() - 1, height() - 1))),
-        area(),
-        'food2',
-      ])
+    if (score.value!=0 && score.value%10==0) {
+      food2 = add([sprite('pizza'), pos(rand(vec2(width() - 1, height() - 1))), area(), 'food2'])
     }
     food1 = add([sprite('apple'), pos(new_pos), area(), 'food1'])
   }
@@ -180,21 +177,21 @@ scene('main', () => {
     snake_length++
     respawn_food()
     score.value += 4
-    score.text = 'Score: ' + score.value
+    score.text = "Score: " + score.value
     move_delay -= 0.001
     play('eat', {
-      volume: 1,
+      volume: 1
     })
   })
-
+  
   collides('snake', 'food2', (s, f) => {
     snake_length++
     respawn_food()
     score.value += 30
-    score.text = 'Score: ' + score.value
+    score.text = "Score: " + score.value
     move_delay -= 0.002
     play('eat', {
-      volume: 1,
+      volume: 1
     })
   })
 
@@ -203,11 +200,8 @@ scene('main', () => {
     shake(12)
     music.pause()
     add([
-      text('Your score: ' + score.value + '\n\nPress Space to restart!', {
-        font: 'apl386',
-        size: 48,
-      }),
-      pos(300, 300),
+      text('Your score: ' + score.value + '\n\nPress Space to restart!', {font: 'apl386',  size: 48}),
+      pos(300,300),
     ])
     keyPress('space', () => {
       go('main')
