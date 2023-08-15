@@ -2,7 +2,7 @@
 
 This is a simple 2D Snake Game made using Kaboom.js. Kaboom is a JavaScript library that allows a user to make 2D games using JavaScript and run it on the browser.
 
-Check out my game and play at this site: https://sakibur-karim.github.io/2D-Snake-Game/
+Check out my game and play at this site: https://twod-snake-game.onrender.com
 
 ## Tools & Technologies
 
@@ -10,6 +10,7 @@ Check out my game and play at this site: https://sakibur-karim.github.io/2D-Snak
 - Kaboom.js
 - HTML
 - Git/GitHub
+- Render
 - Visual Studio 
 
 ## How it looks:
