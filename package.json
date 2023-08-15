@@ -9,6 +9,7 @@
 		"kaboom": "2000.0.0-beta.24"
 	},
 	"devDependencies": {
-		"esbuild": "^0.19.2"
+		"esbuild": "^0.19.2",
+		"grunt": "^1.6.1"
 	}
 }
