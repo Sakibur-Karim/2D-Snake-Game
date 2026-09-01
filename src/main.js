@@ -1,9 +1,6 @@
 import kaboom from "kaboom"
 
-kaboom({
-  global: true // Exposes function names globally for modern Kaboom v3000+
-})
-
+kaboom()
 loadRoot('images/')
 loadSprite('apple', 'apple.png')
 loadSprite('bg', 'bg.jpg')
@@ -13,7 +10,9 @@ loadRoot('sounds/')
 loadSound('m', 'music.m4a')
 loadSound('eat', 'eat.wav')
 
+
 scene('main', () => {
+
   const block_size = 40
   const music = play("m", {
     loop: true
@@ -22,7 +21,7 @@ scene('main', () => {
   add([sprite('bg')])
 
   const score = add([
-    text("Score: 0", { font: 'apl386', size: 48, width: 320 }),
+    text("Score: 0", {font: 'apl386',  size: 48, width: 320}),
     pos(24, 24),
     { value: 0 },
   ])
@@ -44,19 +43,17 @@ scene('main', () => {
 
     snake_body = []
     snake_length = 3
-    
-    // Spawns segments horizontally to prevent instant self-collision on frame 1
-    for (let i = 0; i < snake_length; i++) {
+    for (let i = 1; i <= snake_length; i++) {
       let segment = add([
         rect(block_size, block_size),
-        pos(block_size * (i + 1), block_size * 2),
+        pos(block_size, block_size * i),
         color(149, 255, 128),
         area(),
         'snake',
       ])
       snake_body.push(segment)
     }
-    current_direction = directions.RIGHT
+    current_direction = directions.DOWN
   }
 
   function respawn_all() {
@@ -70,34 +67,33 @@ scene('main', () => {
 
   respawn_all()
 
-  onKeyPress('up', () => {
-    if (current_direction !== directions.DOWN) {
+  keyPress('up', () => {
+    if (current_direction != directions.DOWN) {
       current_direction = directions.UP
     }
   })
 
-  onKeyPress('down', () => {
-    if (current_direction !== directions.UP) {
+  keyPress('down', () => {
+    if (current_direction != directions.UP) {
       current_direction = directions.DOWN
     }
   })
 
-  onKeyPress('left', () => {
-    if (current_direction !== directions.RIGHT) {
+  keyPress('left', () => {
+    if (current_direction != directions.RIGHT) {
       current_direction = directions.LEFT
     }
   })
 
-  onKeyPress('right', () => {
-    if (current_direction !== directions.LEFT) {
+  keyPress('right', () => {
+    if (current_direction != directions.LEFT) {
       current_direction = directions.RIGHT
     }
   })
 
   let move_delay = 0.1
   let timer = 0
-
-  onUpdate(() => {
+  action(() => {
     if (!run_action) return
     timer += dt()
     if (timer < move_delay) return
@@ -144,7 +140,7 @@ scene('main', () => {
     }
   })
 
-  onUpdate('wraps', (e) => {
+  action('wraps', (e) => {
     if (e.pos.x > width()) {
       e.pos.x = 0
     }
@@ -171,13 +167,13 @@ scene('main', () => {
     if (food2) {
       destroy(food2)
     }
-    if (score.value !== 0 && score.value % 10 === 0) {
+    if (score.value!=0 && score.value%10==0) {
       food2 = add([sprite('pizza'), pos(rand(vec2(width() - 1, height() - 1))), area(), 'food2'])
     }
     food1 = add([sprite('apple'), pos(new_pos), area(), 'food1'])
   }
 
-  onCollide('snake', 'food1', (s, f) => {
+  collides('snake', 'food1', (s, f) => {
     snake_length++
     respawn_food()
     score.value += 4
@@ -187,8 +183,8 @@ scene('main', () => {
       volume: 1
     })
   })
-
-  onCollide('snake', 'food2', (s, f) => {
+  
+  collides('snake', 'food2', (s, f) => {
     snake_length++
     respawn_food()
     score.value += 30
@@ -199,26 +195,17 @@ scene('main', () => {
     })
   })
 
-  onCollide('snake', 'snake', (s1, s2) => {
-    if (!run_action) return
-
-    // Checks that the snake's actual head is involved in the collision
-    const head = snake_body[snake_body.length - 1]
-    if (s1 === head || s2 === head) {
-      run_action = false
-      shake(12)
-      music.paused = true
-
-      add([
-        text('Your score: ' + score.value + '\n\nPress Space to restart!', { font: 'apl386', size: 48 }),
-        pos(100, 300),
-      ])
-
-      onKeyPress('space', () => {
-        go('main')
-      })
-    }
+  collides('snake', 'snake', (s, t) => {
+    run_action = false
+    shake(12)
+    music.pause()
+    add([
+      text('Your score: ' + score.value + '\n\nPress Space to restart!', {font: 'apl386',  size: 48}),
+      pos(300,300),
+    ])
+    keyPress('space', () => {
+      go('main')
+    })
   })
 })
-
 go('main')
