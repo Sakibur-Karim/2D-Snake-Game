@@ -10,7 +10,6 @@ loadRoot('sounds/')
 loadSound('m', 'music.m4a')
 loadSound('eat', 'eat.wav')
 
-
 scene('main', () => {
 
   const block_size = 40
@@ -21,7 +20,7 @@ scene('main', () => {
   add([sprite('bg')])
 
   const score = add([
-    text("Score: 0", {font: 'apl386',  size: 48, width: 320}),
+    text("Score: 0", { font: 'apl386', size: 48, width: 320 }),
     pos(24, 24),
     { value: 0 },
   ])
@@ -67,33 +66,36 @@ scene('main', () => {
 
   respawn_all()
 
-  keyPress('up', () => {
-    if (current_direction != directions.DOWN) {
+  // UPDATED: keyPress -> onKeyPress
+  onKeyPress('up', () => {
+    if (current_direction !== directions.DOWN) {
       current_direction = directions.UP
     }
   })
 
-  keyPress('down', () => {
-    if (current_direction != directions.UP) {
+  onKeyPress('down', () => {
+    if (current_direction !== directions.UP) {
       current_direction = directions.DOWN
     }
   })
 
-  keyPress('left', () => {
-    if (current_direction != directions.RIGHT) {
+  onKeyPress('left', () => {
+    if (current_direction !== directions.RIGHT) {
       current_direction = directions.LEFT
     }
   })
 
-  keyPress('right', () => {
-    if (current_direction != directions.LEFT) {
+  onKeyPress('right', () => {
+    if (current_direction !== directions.LEFT) {
       current_direction = directions.RIGHT
     }
   })
 
   let move_delay = 0.1
   let timer = 0
-  action(() => {
+
+  // UPDATED: action -> onUpdate
+  onUpdate(() => {
     if (!run_action) return
     timer += dt()
     if (timer < move_delay) return
@@ -140,7 +142,8 @@ scene('main', () => {
     }
   })
 
-  action('wraps', (e) => {
+  // UPDATED: action -> onUpdate
+  onUpdate('wraps', (e) => {
     if (e.pos.x > width()) {
       e.pos.x = 0
     }
@@ -167,45 +170,44 @@ scene('main', () => {
     if (food2) {
       destroy(food2)
     }
-    if (score.value!=0 && score.value%10==0) {
+    if (score.value !== 0 && score.value % 10 === 0) {
       food2 = add([sprite('pizza'), pos(rand(vec2(width() - 1, height() - 1))), area(), 'food2'])
     }
     food1 = add([sprite('apple'), pos(new_pos), area(), 'food1'])
   }
 
-  collides('snake', 'food1', (s, f) => {
+  // UPDATED: collides -> onCollide
+  onCollide('snake', 'food1', (s, f) => {
     snake_length++
     respawn_food()
     score.value += 4
     score.text = "Score: " + score.value
     move_delay -= 0.001
-    play('eat', {
-      volume: 1
-    })
+    play('eat', { volume: 1 })
   })
-  
-  collides('snake', 'food2', (s, f) => {
+
+  onCollide('snake', 'food2', (s, f) => {
     snake_length++
     respawn_food()
     score.value += 30
     score.text = "Score: " + score.value
     move_delay -= 0.002
-    play('eat', {
-      volume: 1
-    })
+    play('eat', { volume: 1 })
   })
 
-  collides('snake', 'snake', (s, t) => {
+  onCollide('snake', 'snake', (s, t) => {
     run_action = false
     shake(12)
     music.pause()
     add([
-      text('Your score: ' + score.value + '\n\nPress Space to restart!', {font: 'apl386',  size: 48}),
-      pos(300,300),
+      text('Your score: ' + score.value + '\n\nPress Space to restart!', { font: 'apl386', size: 48 }),
+      pos(300, 300),
     ])
-    keyPress('space', () => {
+    
+    onKeyPress('space', () => {
       go('main')
     })
   })
 })
+
 go('main')
