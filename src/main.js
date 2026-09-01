@@ -203,10 +203,11 @@ scene('main', () => {
   onCollide('snake', 'snake', (s, t) => {
     run_action = false
     shake(12)
-    music.pause()
+    music.paused = true
     add([
       text('Your score: ' + score.value + '\n\nPress Space to restart!', { font: 'apl386', size: 48 }),
       pos(300, 300),
+      music.stop()
     ])
     
     onKeyPress('space', () => {
