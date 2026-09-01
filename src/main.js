@@ -12,7 +12,7 @@ loadSprite('bg', 'bg.jpg')
 loadSprite('pizza', 'pizza.png')
 
 loadRoot('sounds/')
-loadSound('m', 'music.m4a')
+loadSound('m', 'music.mp3')
 loadSound('eat', 'eat.wav')
 
 scene('main', () => {
