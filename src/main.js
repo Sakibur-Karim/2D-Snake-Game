@@ -44,17 +44,19 @@ scene('main', () => {
 
     snake_body = []
     snake_length = 3
-    for (let i = 1; i <= snake_length; i++) {
+    
+    // Spawns segments horizontally to prevent instant self-collision on frame 1
+    for (let i = 0; i < snake_length; i++) {
       let segment = add([
         rect(block_size, block_size),
-        pos(block_size, block_size * i),
+        pos(block_size * (i + 1), block_size * 2),
         color(149, 255, 128),
         area(),
         'snake',
       ])
       snake_body.push(segment)
     }
-    current_direction = directions.DOWN
+    current_direction = directions.RIGHT
   }
 
   function respawn_all() {
@@ -68,7 +70,6 @@ scene('main', () => {
 
   respawn_all()
 
-  // UPDATED: keyPress -> onKeyPress
   onKeyPress('up', () => {
     if (current_direction !== directions.DOWN) {
       current_direction = directions.UP
@@ -96,7 +97,6 @@ scene('main', () => {
   let move_delay = 0.1
   let timer = 0
 
-  // UPDATED: action -> onUpdate
   onUpdate(() => {
     if (!run_action) return
     timer += dt()
@@ -144,7 +144,6 @@ scene('main', () => {
     }
   })
 
-  // UPDATED: action -> onUpdate
   onUpdate('wraps', (e) => {
     if (e.pos.x > width()) {
       e.pos.x = 0
@@ -178,7 +177,6 @@ scene('main', () => {
     food1 = add([sprite('apple'), pos(new_pos), area(), 'food1'])
   }
 
-  // UPDATED: collides -> onCollide
   onCollide('snake', 'food1', (s, f) => {
     snake_length++
     respawn_food()
@@ -201,22 +199,25 @@ scene('main', () => {
     })
   })
 
-  onCollide('snake', 'snake', (s, t) => {
-    run_action = false
-    shake(12)
-    
-    // UPDATED: music.pause() -> music.paused = true
-    music.paused = true
+  onCollide('snake', 'snake', (s1, s2) => {
+    if (!run_action) return
 
-    add([
-      text('Your score: ' + score.value + '\n\nPress Space to restart!', { font: 'apl386', size: 48 }),
-      pos(300, 300),
-    ])
+    // Checks that the snake's actual head is involved in the collision
+    const head = snake_body[snake_body.length - 1]
+    if (s1 === head || s2 === head) {
+      run_action = false
+      shake(12)
+      music.paused = true
 
-    // UPDATED: keyPress -> onKeyPress
-    onKeyPress('space', () => {
-      go('main')
-    })
+      add([
+        text('Your score: ' + score.value + '\n\nPress Space to restart!', { font: 'apl386', size: 48 }),
+        pos(100, 300),
+      ])
+
+      onKeyPress('space', () => {
+        go('main')
+      })
+    }
   })
 })
 
