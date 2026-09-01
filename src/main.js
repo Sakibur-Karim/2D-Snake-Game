@@ -1,5 +1,10 @@
 import kaboom from "kaboom"
 
+// Global mode enables direct calls to onKeyPress, onUpdate, etc.
+kaboom({
+  global: true
+})
+
 kaboom()
 loadRoot('images/')
 loadSprite('apple', 'apple.png')
